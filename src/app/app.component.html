@@ -1,0 +1,83 @@
+<div class="jumbotron">
+  <h1 class="display-4">Relatório</h1>
+  <hr class="my-4">
+</div>
+<div class="container">
+  <form [formGroup]="FormGroupIrregularidades">
+    <div formArrayName="irregularidades">
+      <div *ngFor="let irreg of irregularidades.controls; index as i">
+        <div [formGroupName]="i">
+          <h4>Irregularidade -
+            {{i !== null ? irregularidades.controls[i].value.item_id  :" "}}
+          </h4>
+          <div class="row">
+            <div class="form-group col-2">
+              <label for="">ID</label>
+              <input type="text" class="form-control" formControlName="item_id">
+            </div>
+            <div class="form-group col-7">
+              <label for="">Descrição</label>
+              <input type="text" class="form-control"
+                formControlName="descricao_item">
+            </div>
+            <div class="form-group col-1  align-self-end">
+              <button type="button" class="btn btn-danger btn-block"
+                (click)="removeIrregularidades(i)">x</button>
+            </div>
+            <div class="form-group col-2 align-self-end">
+              <button type="button"
+                [disabled]="irregularidades.controls[i].value.item_id == ''"
+                class="btn btn-primary btn-block"
+                (click)="addItem(i)">+Item</button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="irregularidades.controls[i].get('items') != []">
+          <div class="formItem"
+            *ngFor="let data of irregularidades.controls[i].get('items').value  ; index as f">
+
+            <div class="row">
+              <div class="form-group col-2">
+                <label for="">ID</label>
+                <input type="text" class="form-control" disabled="true"
+                  (blur)="setItem(data, i,f)"
+                  [ngModelOptions]="{standalone: true}" [(ngModel)]="data.id">
+              </div>
+              <div class="form-group col-6">
+                <label for="">Irregularidades</label>
+                <input type="text" class="form-control"
+                  [ngModelOptions]="{standalone: true}"
+                  (blur)="setItem(data, i,f)"
+                  [(ngModel)]=" data.irregularidades">
+              </div>
+              <div class="form-group col-3">
+                <label for="">Prazo</label>
+                <input type="text" class="form-control"
+                  (blur)="setItem(data, i,f)"
+                  [ngModelOptions]="{standalone: true}"
+                  [(ngModel)]="data.prazo">
+              </div>
+              <div class="form-group col align-self-end">
+                <button type="button" class="btn btn-danger "
+                  (click)="removeItem(data, i)">X</button>
+              </div>
+              <div class="form-group col-12">
+                <label for="">Recomendações</label>
+                <textarea [ngModelOptions]="{standalone: true}"
+                  (blur)="setItem(data, i,f)" [(ngModel)]="data.recomendacoes"
+                  class="form-control" name="" rows="3"></textarea>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-block btn-primary"
+        (click)="addIrregularidades()">+
+        Irregularidades</button>
+    </div>
+  </form>
+  <div class="output">
+    <p>irregularidades: {{FormGroupIrregularidades.value | json}}</p>
+  </div>
+</div>
